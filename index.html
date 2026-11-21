@@ -6,6 +6,14 @@
 <meta name="robots" content="noindex, nofollow">
 <title>山本光司 | 動画編集／編集ディレクター</title>
 <meta name="description" content="動画編集／編集ディレクター 山本光司のプロフィール。ショート広告・ビジネス系ショート・ビジネス系横動画。">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://kjyamamoto0227-cpu.github.io/self-intro/">
+<meta property="og:title" content="山本光司 | 動画編集／編集ディレクター">
+<meta property="og:description" content="ショート動画広告・ビジネス系ショート・ビジネス系横動画。納品約1,000本の動画編集／編集ディレクター。">
+<meta property="og:image" content="https://kjyamamoto0227-cpu.github.io/self-intro/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700&family=Noto+Sans+JP:wght@400;500;700&family=Inter:wght@300;500;700&display=swap" rel="stylesheet">
@@ -210,8 +218,6 @@
   }
   .on .wipe::after { animation: wipe 1.1s cubic-bezier(.77, 0, .18, 1) forwards; }
   .on .wipe .t { animation: wipeText .01s linear .55s forwards; }
-  .on .wipe:nth-of-type(2)::after { animation-delay: .15s; }
-  .on .wipe:nth-of-type(2) .t { animation-delay: .7s; }
   @keyframes wipe {
     0%   { transform: scaleX(0); transform-origin: left; }
     50%  { transform: scaleX(1); transform-origin: left; }
@@ -222,9 +228,59 @@
   .work:first-child { padding-top: 0; }
   .work .big { font-family: var(--en); font-weight: 700; font-size: 56px; line-height: 1; color: var(--accent); }
   .work .big small { font-family: var(--sans); font-size: 16px; color: var(--text); margin-left: 6px; font-weight: 500; }
-  .work .big.text { font-family: var(--mincho); font-size: 30px; line-height: 1.4; }
+  .work .big.text { font-family: var(--mincho); font-size: 30px; line-height: 1.4; white-space: nowrap; }
   .work h3 { font-size: 17px; margin-bottom: 8px; }
   .work p { font-size: 14px; color: var(--muted); }
+
+
+  /* flow：線が左から引かれて、番号が順番に点灯する */
+  .flow { list-style: none; position: relative; display: grid; grid-template-columns: repeat(5, 1fr); gap: 20px; }
+  .flow::before {
+    content: ""; position: absolute; left: 22px; right: 22px; top: 22px; height: 1px;
+    background: linear-gradient(90deg, var(--accent), var(--line));
+    transform: scaleX(0); transform-origin: left;
+    transition: transform 1.6s cubic-bezier(.65, 0, .35, 1) .2s;
+  }
+  .flow.on::before { transform: scaleX(1); }
+  .flow li { position: relative; opacity: 0; transform: translateY(16px); transition: opacity .6s ease, transform .6s cubic-bezier(.16, 1, .3, 1); }
+  .flow.on li { opacity: 1; transform: none; }
+  .flow .dot {
+    display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%;
+    background: var(--bg); border: 1px solid var(--line);
+    font-family: var(--en); font-size: 13px; letter-spacing: .05em; color: var(--muted);
+    transition: border-color .4s, color .4s, background .4s, transform .5s cubic-bezier(.34, 1.56, .64, 1), box-shadow .5s;
+  }
+  .flow.on .dot { border-color: var(--accent); color: var(--accent); }
+  .flow h3 { font-family: var(--mincho); font-size: 19px; margin: 18px 0 8px; }
+  .flow p { font-size: 13px; color: var(--muted); line-height: 1.8; }
+  .flow.on:not(.ready) li:nth-child(1), .flow.on:not(.ready) li:nth-child(1) .dot { transition-delay: 0.25s; }
+  .flow.on:not(.ready) li:nth-child(2), .flow.on:not(.ready) li:nth-child(2) .dot { transition-delay: 0.55s; }
+  .flow.on:not(.ready) li:nth-child(3), .flow.on:not(.ready) li:nth-child(3) .dot { transition-delay: 0.85s; }
+  .flow.on:not(.ready) li:nth-child(4), .flow.on:not(.ready) li:nth-child(4) .dot { transition-delay: 1.15s; }
+  .flow.on:not(.ready) li:nth-child(5), .flow.on:not(.ready) li:nth-child(5) .dot { transition-delay: 1.45s; }
+
+  /* 選んだ段階に色がついて大きくなる */
+  .flow li { cursor: pointer; outline: none; }
+  .flow h3 { transform-origin: left center; transition: color .4s, transform .5s cubic-bezier(.34, 1.56, .64, 1); }
+  .flow p { transition: color .4s; }
+  .flow.ready li { transition: opacity .4s ease, transform .5s cubic-bezier(.16, 1, .3, 1); }
+  .flow li.active .dot {
+    background: var(--accent); color: #111; border-color: var(--accent); font-weight: 700;
+    transform: scale(1.35); box-shadow: 0 0 0 10px rgba(200,164,106,.14);
+  }
+  .flow li.active h3 { color: var(--accent); transform: scale(1.15); }
+  .flow li.active p { color: var(--text); }
+  .flow.picking li:not(.active) h3, .flow.picking li:not(.active) p { opacity: .35; }
+  .flow.picking li:not(.active) .dot { border-color: var(--line); color: #55575c; }
+  .flow h3, .flow p { transition: color .4s, opacity .4s, transform .5s cubic-bezier(.34, 1.56, .64, 1); }
+  /* 選んだところまで線が金色で埋まる */
+  .flow::after {
+    content: ""; position: absolute; left: 22px; right: 22px; top: 22px; height: 2px; margin-top: -.5px;
+    background: var(--accent);
+    transform: scaleX(var(--p, 0)); transform-origin: left;
+    transition: transform .6s cubic-bezier(.16, 1, .3, 1);
+  }
+  .flow .dot { position: relative; z-index: 1; }
 
   /* contact */
   .contact { text-align: center; }
@@ -316,6 +372,13 @@
     .skill .arrow { display: none; }
     .work { grid-template-columns: 1fr; gap: 16px; }
     .head { flex-direction: column; gap: 4px; margin-bottom: 40px; }
+    .flow { grid-template-columns: 1fr; gap: 28px; }
+    .flow::before { left: 22px; right: auto; top: 22px; bottom: 22px; width: 1px; height: auto; transform: scaleY(0); transform-origin: top; background: linear-gradient(var(--accent), var(--line)); }
+    .flow.on::before { transform: scaleY(1); }
+    .flow::after { left: 21px; right: auto; top: 22px; bottom: 22px; width: 2px; height: auto; margin: 0; transform: scaleY(var(--p, 0)); transform-origin: top; }
+    .flow li { display: grid; grid-template-columns: 44px 1fr; column-gap: 18px; }
+    .flow h3 { margin: 8px 0 4px; }
+    .flow p { grid-column: 2; }
     .scroll { display: none; }
     .editor-bg .ed-timeline { height: 24%; }
     .fixtag { left: auto; right: 0; top: 100%; margin: 6px 0 0; }
@@ -333,6 +396,7 @@
     <nav>
       <a href="#skills">SKILLS</a>
       <a href="#works">WORKS</a>
+      <a href="#flow">FLOW</a>
       <a href="#contact">CONTACT</a>
     </nav>
   </div>
@@ -399,13 +463,26 @@
         </div>
       </div>
       <div class="work reveal">
-        <div class="big text"><span class="wipe"><span class="t">内製化</span></span><br><span class="wipe"><span class="t">支援</span></span></div>
+        <div class="big text"><span class="wipe"><span class="t">内製化支援</span></span></div>
         <div>
           <h3>動画編集の内製化 講師（ディレクター）</h3>
           <p>クライアント社内での動画編集の内製化を、講師・ディレクターとして支援。3か月でクライアントが納得できる内製化を実現しました。</p>
         </div>
       </div>
     </div>
+  </div>
+</section>
+
+<section class="block" id="flow">
+  <div class="wrap">
+    <div class="head head-cap reveal"><span class="en"><span class="cap">F</span>low</span><span class="ja">ご依頼から納品までの流れ</span></div>
+    <ol class="flow reveal">
+      <li tabindex="0"><span class="dot">01</span><h3>ご相談</h3><p>動画の目的・見てほしい人・本数などをお聞きします。</p></li>
+      <li tabindex="0"><span class="dot">02</span><h3>お見積り</h3><p>内容に合わせて、料金と納期をご提案します。</p></li>
+      <li tabindex="0"><span class="dot">03</span><h3>編集</h3><p>素材をお預かりして、構成から仕上げまで編集します。</p></li>
+      <li tabindex="0"><span class="dot">04</span><h3>確認・修正</h3><p>初稿をご確認いただき、修正のご要望を反映します。</p></li>
+      <li tabindex="0"><span class="dot">05</span><h3>納品</h3><p>ご指定の形式でお渡しします。継続のご依頼も歓迎です。</p></li>
+    </ol>
   </div>
 </section>
 
@@ -594,6 +671,30 @@
       box.remove(); tag.remove();
     }
     run();
+  })();
+
+
+  // フロー：選んだ段階に色をつけて大きくする
+  (function () {
+    const flow = document.querySelector('.flow');
+    const items = [...flow.children];
+    const pick = (li) => {
+      items.forEach(x => x.classList.toggle('active', x === li));
+      flow.classList.toggle('picking', !!li);
+      flow.style.setProperty('--p', li ? items.indexOf(li) / (items.length - 1) : 0);
+    };
+    // 出てくる動きが終わったら、時間差を外す
+    new MutationObserver(() => {
+      if (flow.classList.contains('on')) setTimeout(() => flow.classList.add('ready'), 2000);
+    }).observe(flow, { attributes: true, attributeFilter: ['class'] });
+    items.forEach(li => {
+      li.addEventListener('mouseenter', () => pick(li));
+      li.addEventListener('focus', () => pick(li));
+      li.addEventListener('click', () => pick(li));
+    });
+    flow.addEventListener('mouseleave', () => pick(null));
+    // スマホ：外側をタップしたら選択を外す
+    document.addEventListener('click', (e) => { if (!flow.contains(e.target)) pick(null); });
   })();
 
   const io = new IntersectionObserver((entries) => {
